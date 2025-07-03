@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DetikClone - Bisnis</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="container nav-bar">
+      <h1 class="logo">detik<span>news</span></h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="nasional.html">Nasional</a></li>
+          <li><a href="teknologi.html">Teknologi</a></li>
+          <li><a href="bisnis.html">Bisnis</a></li>
+          <li><a href="olahraga.html">Olahraga</a></li>
+          <li><a href="hiburan.html">Hiburan</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="headline">
+      <h2>Berita Bisnis</h2>
+      <div id="news-list" class="news-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 DetikClone. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const API_KEY = "08052fbdcc1640ef849788b90d8cf87f";
+    const newsList = document.getElementById("news-list");
+
+    fetch(`https://newsapi.org/v2/top-headlines?country=id&category=business&apiKey=\${API_KEY}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.articles.length === 0) {
+          newsList.innerHTML = "<p>Tidak ada berita saat ini.</p>";
+          return;
+        }
+
+        data.articles.forEach(article => {
+          const newsCard = document.createElement("div");
+          newsCard.className = "news-card";
+          newsCard.innerHTML = `
+            <img src="\${article.urlToImage || 'https://via.placeholder.com/400'}" alt="Gambar">
+            <h3>\${article.title}</h3>
+            <p>\${article.description || ''}</p>
+            <a href="\${article.url}" target="_blank">Baca selengkapnya</a>
+          `;
+          newsList.appendChild(newsCard);
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        newsList.innerHTML = "<p>Gagal memuat berita.</p>";
+      });
+  </script>
+</body>
+</html>
